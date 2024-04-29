@@ -25,21 +25,15 @@ public List<Note> listAll(){
     }
     @Override
     public void deleteById(long id){
-        Note note = getById(id);
-        if (!note.getId().equals(id)) {
+       if (!noteRepository.existsById(id)) {
             throw new IllegalArgumentException("Note with id " + id + " not found");
         }
         noteRepository.deleteById(id);
     }
     @Override
     public void update(Note note){
-        long id = note.getId();
-        Note existingNote = getById(id);
-        if (existingNote != null) {
-            existingNote.setTitle(note.getTitle());
-            existingNote.setContent(note.getContent());
-        } else {
-            throw new IllegalArgumentException("Note with id " + id + " not found");
+        if (!noteRepository.existsById(note.getId())) {
+            throw new IllegalArgumentException("Note with id " + note.getId() + " not found");
         }
         noteRepository.save(note);
     }
